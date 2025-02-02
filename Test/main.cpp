@@ -151,7 +151,7 @@ void drawTank(float xOffset, float yOffset)
 {
     // Tank body 1
     glBegin(GL_POLYGON);
-    glColor3ub(50,56,6);
+    glColor3ub(34,36,34);
     glVertex2i(525 + xOffset, 325 + yOffset);
     glVertex2i(535 + xOffset, 325 + yOffset);
     glVertex2i(715 + xOffset, 325 + yOffset);
@@ -162,8 +162,10 @@ void drawTank(float xOffset, float yOffset)
 
     // Tank body 2
     glBegin(GL_QUADS);
+    glColor3ub(50,56,6);
     glVertex2i(565 + xOffset, 350 + yOffset);
     glVertex2i(675 + xOffset, 350 + yOffset);
+    glColor3ub(34,36,34);
     glVertex2i(675 + xOffset, 390 + yOffset);
     glVertex2i(565 + xOffset, 390 + yOffset);
 
@@ -214,7 +216,7 @@ void drawTank(float xOffset, float yOffset)
     glColor3ub(22, 23, 22);
     for(int i = 0; i <= 360; i++) {
         float angle = i * 3.1416 / 180;
-        glVertex2f(583 + xOffset + cos(angle) * 10, 310 + yOffset + sin(angle) * 10);
+        glVertex2f(583 + xOffset + cos(angle) * 12, 310 + yOffset + sin(angle) * 12);
     }
     glEnd();
 
@@ -223,7 +225,7 @@ void drawTank(float xOffset, float yOffset)
     glColor3ub(22, 23, 22);
     for(int i = 0; i <= 360; i++) {
         float angle = i * 3.1416 / 180;
-        glVertex2f(611 + xOffset + cos(angle) * 10, 305 + yOffset + sin(angle) * 10);
+        glVertex2f(611 + xOffset + cos(angle) * 13, 305 + yOffset + sin(angle) * 13);
     }
     glEnd();
 
@@ -232,7 +234,7 @@ void drawTank(float xOffset, float yOffset)
     glColor3ub(22, 23, 22);
     for(int i = 0; i <= 360; i++) {
         float angle = i * 3.1416 / 180;
-        glVertex2f(639 + xOffset + cos(angle) * 10, 305 + yOffset + sin(angle) * 10);
+        glVertex2f(639 + xOffset + cos(angle) * 13, 305 + yOffset + sin(angle) * 13);
     }
     glEnd();
 
@@ -241,11 +243,84 @@ void drawTank(float xOffset, float yOffset)
     glColor3ub(22, 23, 22);
     for(int i = 0; i <= 360; i++) {
         float angle = i * 3.1416 / 180;
-        glVertex2f(667 + xOffset + cos(angle) * 10, 306 + yOffset + sin(angle) * 10);
+        glVertex2f(667 + xOffset + cos(angle) * 12, 306 + yOffset + sin(angle) * 12);
     }
     glEnd();
 
-    glFlush();
+    //glFlush();
+}
+
+void drawArmy(int x, int y) {
+    // Face (Light Brown Square)
+    glBegin(GL_QUADS);
+    glColor3f(0.8, 0.52, 0.25);
+    glVertex2i(x + 10, y + 30);
+    glVertex2i(x + 30, y + 30);
+    glVertex2i(x + 30, y + 50);
+    glVertex2i(x + 10, y + 50);
+    glEnd();
+
+    // Helmet
+    glBegin(GL_POLYGON);
+    glColor3f(0.0, 0.5, 0.0);
+    for (int i = 0; i < 180; i++) {
+        float angle = i * 3.14159f / 180;
+        glVertex2f(x + 20 + 15 * cos(angle), y + 40 + 15 * sin(angle));  // size
+    }
+    glEnd();
+
+    // Hand
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.5, 0.0);
+    glVertex2i(x -2, y + 10);   // Bottom Left
+    glVertex2i(x + 35, y + 10);  // Bottom Right
+    glVertex2i(x + 35, y + 30);  // Top Right
+    glVertex2i(x - 2, y + 30);  // Top Left
+    glEnd();
+
+    // Body Texture Darker Green
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.3, 0.0);
+    glVertex2i(x + 5, y + 8);
+    glVertex2i(x + 35, y + 8);
+    glVertex2i(x + 35, y + 30);
+    glVertex2i(x + 5, y + 30);
+    glEnd();
+
+    // Legs
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.5, 0.0);
+    glVertex2i(x + 8, y - 8);
+    glVertex2i(x + 18, y - 8);
+    glVertex2i(x + 18, y + 10);
+    glVertex2i(x + 8, y + 10);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.5, 0.0);
+    glVertex2i(x + 22, y - 8);
+    glVertex2i(x + 32, y - 8);
+    glVertex2i(x + 32, y + 10);
+    glVertex2i(x + 22, y + 10);
+    glEnd();
+
+    // Rifle body
+    glBegin(GL_QUADS);
+    glColor3f(0.6, 0.3, 0.1);
+    glVertex2i(x + 20, y + 16);
+    glVertex2i(x + 70, y + 20);
+    glVertex2i(x + 70, y + 25);
+    glVertex2i(x + 20, y + 25);
+    glEnd();
+
+    // Over Hand
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.5, 0.0);
+    glVertex2i(x + 4, y + 10);      // Bottom-left corner
+    glVertex2i(x + 20, y + 15);      // Bottom-right corner
+    glVertex2i(x + 20, y + 25); // Top-right corner
+    glVertex2i(x + 4, y + 20); // Top-left corner
+    glEnd();
 }
 
 
@@ -266,6 +341,12 @@ void display(void)
     // Draw the tank
     drawTank(tankPos, -180);
 
+    drawArmy(100, 100);
+    drawArmy(85, 80);
+    drawArmy(70, 65);
+    drawArmy(85, 40);
+    drawArmy(65, 20);
+
     glFlush();
 }
 
@@ -282,7 +363,7 @@ int main(int argc, char** argv)
     cout << "3. S.M.Nahid Hassan   [22-49026-3]" << endl;
 
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);; // Double buffering for smooth rendering
     glutInitWindowSize(1200, 700); // Set landscape window size
     glutInitWindowPosition(200, 50); // Set window position
     glutCreateWindow("July Revolution Rendition: Echos of freedom");

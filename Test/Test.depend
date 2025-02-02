@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1738528785 source:d:\aiub\semester 7\computer graphics\project\july-revolution-rendition-computer-graphics-\test\main.cpp
+1738537111 source:d:\aiub\semester 7\computer graphics\project\july-revolution-rendition-computer-graphics-\test\main.cpp
 	<cstdio>
 	<GL/gl.h>
 	<GL/glut.h>
@@ -11,21 +11,6 @@
 	<iostream>
 
 1301111164 c:\program files (x86)\codeblocks\mingw\include\gl\gl.h
-
-1341006776 c:\program files (x86)\codeblocks\mingw\include\stdio.h
-	<_mingw.h>
-	<stddef.h>
-	<stdarg.h>
-	<sys/types.h>
-
-1341006770 c:\program files (x86)\codeblocks\mingw\include\_mingw.h
-
-1341006780 c:\program files (x86)\codeblocks\mingw\include\sys\types.h
-	<_mingw.h>
-	<stddef.h>
-
-1341006774 c:\program files (x86)\codeblocks\mingw\include\math.h
-	<_mingw.h>
 
 1730578740 c:\program files (x86)\codeblocks\mingw\include\gl\glut.h
 	<windows.h>
@@ -84,6 +69,8 @@
 1341006776 c:\program files (x86)\codeblocks\mingw\include\string.h
 	<_mingw.h>
 	<stddef.h>
+
+1341006770 c:\program files (x86)\codeblocks\mingw\include\_mingw.h
 
 1301111148 c:\program files (x86)\codeblocks\mingw\include\basetsd.h
 
@@ -238,6 +225,19 @@
 	<stddef.h>
 	<GL/gl.h>
 
+1341006776 c:\program files (x86)\codeblocks\mingw\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1341006780 c:\program files (x86)\codeblocks\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
 1341006770 c:\program files (x86)\codeblocks\mingw\include\conio.h
+	<_mingw.h>
+
+1341006774 c:\program files (x86)\codeblocks\mingw\include\math.h
 	<_mingw.h>
 
