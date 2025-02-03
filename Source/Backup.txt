@@ -736,6 +736,21 @@ void keyboard(unsigned char key, int x, int y) {
 
     if (key == 'r' || key == 'R') {
         isRaining = !isRaining; // Toggle rain animation on or off
+        if (isRaining)
+        {
+            skyColor[0] = 0.6f;
+            skyColor[1] = 0.6f;
+            skyColor[2] = 0.6f;
+            glClearColor(skyColor[0], skyColor[1], skyColor[2], skyColor[3]);
+        }
+        else
+        {
+             // Change background color back to light blue
+            skyColor[0] = 0.53f;
+            skyColor[1] = 0.81f;
+            skyColor[2] = 0.98f;
+            glClearColor(skyColor[0], skyColor[1], skyColor[2], skyColor[3]);
+        }
     }
 
     if (key == 'n' || key == 'N') {

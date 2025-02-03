@@ -1,3 +1,26 @@
+/*
+July Revolution Rendition: Echos of freedom
+=============================================
+
+Keybinds:
+A = Decrease the Tank speed
+D = Increase the Tank speed
+N = Switch to night sky
+B = Switch to day sky
+R = Toggle between rainy and clear sky
+
+=============================================
+
+COMPUTER GRAPHICS [G]
+Fall 2024-2025
+Course Instructor: Dipta Justin Gomes
+
+Submitted by:
+1. Salman Sayeed      [22-49006-3]
+2. Kayjer Islam       [22-49005-3]
+3. S.M.Nahid Hassan   [22-49026-3]
+*/
+
 #include <cstdio>
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -28,10 +51,14 @@ float cloud5Speed = 0.04f;
 float tankPos = -550.0f;
 float tankSpeed = 0.02f;
 
-//flash effect
+//gun flash effect
 bool gunFlash = false;
 int flashCounter = 0;
 int flashSpeed = 500;
+
+//Fire Flash effect
+bool showFire = true; // Flag to control whether to show fire or not
+int flashSpeedFire = 50; // Controls how fast the fire flashes (milliseconds)
 
 // Raindrop positions and speed
 const int numRaindrops = 1000;  // Number of raindrops
@@ -245,6 +272,60 @@ void drawRoad()
 
 }
 
+//Function to draw the fence
+void drawFence(int offsetX, int offsetY) {
+    // Fence Loops
+    glColor3ub(94, 94, 94);
+    for (int i = 0; i <= 1000; i += 15) {  // Loop through every 50 units
+        glBegin(GL_QUADS);
+        glVertex2d(offsetX + i, offsetY + 320);
+        glVertex2d(offsetX + i + 5, offsetY + 320);
+        glVertex2d(offsetX + i + 5, offsetY + 280);
+        glVertex2d(offsetX + i, offsetY + 280);
+        glEnd();
+    }
+
+    // Top Bar
+    glColor3ub(54, 54, 54);
+    glBegin(GL_POLYGON);
+    glVertex2d(offsetX + 0, offsetY + 320);    // bot left
+    glVertex2d(offsetX + 1000, offsetY + 320);  //bot right
+    glVertex2d(offsetX + 1000, offsetY + 330);  // top right
+    glVertex2d(offsetX + 0, offsetY + 330);   //top left
+    glEnd();
+
+    // Bottom Bar
+    glColor3ub(54, 54, 54);
+    glBegin(GL_POLYGON);
+    glVertex2d(offsetX + 0, offsetY + 270);
+    glVertex2d(offsetX + 1000, offsetY + 270);
+    glVertex2d(offsetX + 1000, offsetY + 280);
+    glVertex2d(offsetX + 0, offsetY + 280);
+    glEnd();
+}
+
+void drawBloodTank(float xOffset, float yOffset)
+{
+    glColor3f(1.0, 0.0, 0.0);  // Bright red color
+
+    int segments = 30;
+
+    // Modify the position of the blood drop to be relative to the tank
+    // For example, position it near the gun of the tank or wherever you want the blood to come from
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2i(670 + xOffset, 370 + yOffset); // Adjusted center of the blood drop
+
+    // Draw the circle (blood drop)
+    for (int i = 0; i <= segments; i++) {
+        float angle = (2 * 3.14159265359 * i) / segments;
+        float dx = 6 * cos(angle);
+        float dy = 7 * sin(angle);
+        glVertex2i(670 + xOffset + dx, 370 + yOffset + dy);  // Adjusted coordinates for movement
+    }
+    glEnd();
+}
+
+
 // draw tank
 void drawTank(float xOffset, float yOffset){
     // Tank body 1
@@ -345,17 +426,88 @@ void drawTank(float xOffset, float yOffset){
     }
     glEnd();
 
-    //glFlush();
+    //===================================================================================
+
+    // Now, move the man with the tank
+    int x = 560 + xOffset;  // Man's position adjusted by tank's position
+    int y = 340 + yOffset;
+
+    float angle = 85.0f;
+
+    glPushMatrix();  // Save current transformation state
+
+    // Move the origin of the drawing to the center of the man for rotation
+    glTranslatef(x + 20, y + 25, 0);  // Translate to the center of the man
+    glRotatef(angle, 0.0f, 0.0f, 1.0f);  // Rotate around the z-axis (in 2D)
+
+    glTranslatef(-(x + 20), -(y + 25), 0);
+
+    // Face (Light Brown Square)
+    glBegin(GL_QUADS);
+    glColor3f(0.8, 0.52, 0.25);
+    glVertex2i(x + 10, y + 30);
+    glVertex2i(x + 30, y + 30);
+    glVertex2i(x + 30, y + 50);
+    glVertex2i(x + 10, y + 50);
+    glEnd();
+
+    // Eyes (Black Rectangle)
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 10, y + 45);
+    glVertex2i(x + 30, y + 45);
+    glVertex2i(x + 30, y + 55);
+    glVertex2i(x + 10, y + 55);
+    glEnd();
+
+    // Hand (Rectangle)
+    glBegin(GL_QUADS);
+    glColor3f(0.8, 0.52, 0.25);
+    glVertex2i(x - 2, y + 10);   // Bottom Left
+    glVertex2i(x + 35, y + 10);  // Bottom Right
+    glVertex2i(x + 35, y + 30);  // Top Right
+    glVertex2i(x - 2, y + 30);  // Top Left
+    glEnd();
+
+    // Body
+    glBegin(GL_QUADS);
+    glColor3ub(255, 182, 193);  // Light pink color
+    glVertex2i(x + 5, y + 8);
+    glVertex2i(x + 35, y + 8);
+    glVertex2i(x + 35, y + 30);
+    glVertex2i(x + 5, y + 30);
+    glEnd();
+
+    // Legs
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 8, y - 8);
+    glVertex2i(x + 18, y - 8);
+    glVertex2i(x + 18, y + 10);
+    glVertex2i(x + 8, y + 10);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 22, y - 8);
+    glVertex2i(x + 32, y - 8);
+    glVertex2i(x + 32, y + 10);
+    glVertex2i(x + 22, y + 10);
+    glEnd();
+
+    glPopMatrix();
+    drawBloodTank(xOffset - 85, yOffset);
 }
+
 
 //Gun flash
 void drawGunFlash(int x, int y) {
     if (gunFlash) {
-        glColor3f(1.0, 1.0, 0.0); // Yellow color
+        glColor3f(1.0, 0.7, 0.0);  // Reddish-yellow color
         glBegin(GL_POLYGON);
         for(int i = 0; i <= 360; i++) {
             float angle = i * 3.1416 / 180;
-            glVertex2f(x + cos(angle) * 3, y + sin(angle) * 3);
+            glVertex2f(x + cos(angle) *5, y + sin(angle) *5);
         }
         glEnd();
     }
@@ -554,7 +706,7 @@ void drawBarricade2(int offsetX, int offsetY) {
     glEnd();
 }
 
-
+//Rickshaw
 void drawRickshaw(int offsetX, int offsetY) {
 
 	glBegin(GL_QUADS);
@@ -657,7 +809,7 @@ void drawRickshaw(int offsetX, int offsetY) {
 
 	//wheel
 	glBegin(GL_POLYGON);
-    glColor3f(0, 0, 0);
+    glColor3ub(22, 23, 22);
     int numSegments = 50;
     float radius = 25.0; // Radius of the wheel
     float cx = offsetX + 200; // Center X of the wheel
@@ -672,7 +824,7 @@ void drawRickshaw(int offsetX, int offsetY) {
     glEnd();
 
     glBegin(GL_POLYGON);
-    glColor3f(0, 0, 0);
+    glColor3ub(22, 23, 22);
     float cx2 = offsetX + 285;
     float cy2 = offsetY + 165;
 
@@ -685,15 +837,241 @@ void drawRickshaw(int offsetX, int offsetY) {
     glEnd();
 }
 
+// Draw Tree
+void drawTreeType1(int offsetX, int offsetY) {
 
+    glBegin(GL_QUADS);
+    glColor3ub(80, 49, 30);  // Light brown color
+    glVertex2i(457 + offsetX, 200 + offsetY);
+    glVertex2i(457 + offsetX, 225 + offsetY);
+    glColor3ub(100, 49, 30);  // Dark brown color
+    glVertex2i(442 + offsetX, 225 + offsetY);
+    glVertex2i(442 + offsetX, 200 + offsetY);
+    glEnd();
+
+    glBegin(GL_TRIANGLES); // Tree bot
+    glColor3ub(30, 75, 40);
+    glVertex2i(480 + offsetX, 225 + offsetY);  // bottom right
+    glVertex2i(450 + offsetX, 260 + offsetY);  // top
+    glVertex2i(420 + offsetX, 225 + offsetY);  // bottom left
+    glEnd();
+
+    glBegin(GL_TRIANGLES); // Tree mid1
+    glColor3ub(30, 95, 40);
+    glVertex2i(480 + offsetX, 240 + offsetY);  // bottom right
+    glVertex2i(450 + offsetX, 270 + offsetY);  // top
+    glVertex2i(420 + offsetX, 240 + offsetY);  // bottom left
+    glEnd();
+
+    glBegin(GL_TRIANGLES); // Tree mid2
+    glColor3ub(30, 115, 40);
+    glVertex2i(475 + offsetX, 255 + offsetY);  // bottom right
+    glVertex2i(450 + offsetX, 280 + offsetY);  // top
+    glVertex2i(425 + offsetX, 255 + offsetY);  // bottom left
+    glEnd();
+
+    glBegin(GL_TRIANGLES); // Tree  top
+    glColor3ub(30, 135, 40);
+    glVertex2i(470 + offsetX, 270 + offsetY);  // bottom right
+    glVertex2i(450 + offsetX, 290 + offsetY);  // top
+    glVertex2i(430 + offsetX, 270 + offsetY);  // bottom left
+    glEnd();
+}
+
+//draw House
+void drawHouseType1(int offsetX, int offsetY, unsigned char r, unsigned char g, unsigned char b) {
+    // Draw Building Body
+    glColor3ub(r, g, b);
+    //glColor3ub(80, 49, 30);  // Dark brown building
+    glBegin(GL_QUADS);
+    glVertex2i(400 + offsetX, 200 + offsetY);  // Bottom-left
+    glVertex2i(516 + offsetX, 200 + offsetY);  // Bottom-right
+    glVertex2i(516 + offsetX, 400 + offsetY);  // Top-right
+    glVertex2i(400 + offsetX, 400 + offsetY);  // Top-left
+    glEnd();
+
+    // Windows
+    //glColor3ub(173, 216, 230);
+    int windowWidth = 25;
+    int windowHeight = 30;
+    int gapX = 10; // Horizontal gap between windows
+    int gapY = 15; // Vertical gap between windows
+    int startX = 410 + offsetX; // Initial X position for first window
+    int startY = 360 + offsetY; // Initial Y position for first row of windows
+
+    for (int row = 0; row < 4; row++) {  // 3 Rows
+        for (int col = 0; col < 3; col++) {  // 3 Columns
+            int x = startX + col * (windowWidth + gapX);
+            int y = startY - row * (windowHeight + gapY);
+
+            glBegin(GL_QUADS);
+            glColor3ub(0, 102, 204);
+            glVertex2i(x, y);
+            glVertex2i(x + windowWidth, y);
+            glColor3ub(135, 206, 250);
+            glVertex2i(x + windowWidth, y - windowHeight);
+            glVertex2i(x, y - windowHeight);
+            glEnd();
+        }
+    }
+}
+
+//draw Man
+void drawMan(int x, int y, float angle) {
+    glPushMatrix();  // Save current transformation state
+
+    // Move the origin of the drawing to the center of the man for rotation
+    glTranslatef(x + 20, y + 25, 0);  // Translate to the center of the man
+    glRotatef(angle, 0.0f, 0.0f, 1.0f);  // Rotate around the z-axis (in 2D)
+
+    glTranslatef(-(x + 20), -(y + 25), 0);  // Translate back to the original position
+
+    // Face (Light Brown Square)
+    glBegin(GL_QUADS);
+    glColor3f(0.8, 0.52, 0.25);
+    glVertex2i(x + 10, y + 30);
+    glVertex2i(x + 30, y + 30);
+    glVertex2i(x + 30, y + 50);
+    glVertex2i(x + 10, y + 50);
+    glEnd();
+
+    // Eyes (Black Rectangle)
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 10, y + 45);
+    glVertex2i(x + 30, y + 45);
+    glVertex2i(x + 30, y + 55);
+    glVertex2i(x + 10, y + 55);
+    glEnd();
+
+    // Hand (Rectangle)
+    glBegin(GL_QUADS);
+    glColor3f(0.8, 0.52, 0.25);
+    glVertex2i(x - 2, y + 10);   // Bottom Left
+    glVertex2i(x + 35, y + 10);  // Bottom Right
+    glVertex2i(x + 35, y + 30);  // Top Right
+    glVertex2i(x - 2, y + 30);  // Top Left
+    glEnd();
+
+    // Body (Dark Green)
+    glBegin(GL_QUADS);
+    glColor3ub(200, 205, 200);
+    glVertex2i(x + 5, y + 8);
+    glVertex2i(x + 35, y + 8);
+    glVertex2i(x + 35, y + 30);
+    glVertex2i(x + 5, y + 30);
+    glEnd();
+
+    // Legs (Green)
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 8, y - 8);
+    glVertex2i(x + 18, y - 8);
+    glVertex2i(x + 18, y + 10);
+    glVertex2i(x + 8, y + 10);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2i(x + 22, y - 8);
+    glVertex2i(x + 32, y - 8);
+    glVertex2i(x + 32, y + 10);
+    glVertex2i(x + 22, y + 10);
+    glEnd();
+
+    glPopMatrix();  // Restore the transformation state
+}
+
+void drawLamppost(int x, int y) {
+    // Lamppost Pole
+    glBegin(GL_QUADS);
+    glColor3ub(17, 15, 15);
+    glVertex2i(x - 5, y + 50);      // Bottom-left
+    glVertex2i(x + 5, y + 50);      // Bottom-right
+    glVertex2i(x + 1, y + 100); // Top-right
+    glVertex2i(x - 1, y + 100); // Top-left
+    glEnd();
+
+    // Lamp (Circle)
+    glColor3f(1.0, 1.0, 0.0); // Yellow color for light
+    float radius = 7.0f;
+    int segments = 30; // Number of segments for the circle
+
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2i(x, y + 100);
+    for (int i = 0; i <= segments; i++) {
+        float angle = (2 * 3.14159265359 * i) / segments;
+        float dx = radius * cos(angle);
+        float dy = radius * sin(angle);
+        glVertex2i(x + dx, y + 100 + dy);
+    }
+    glEnd();
+}
+
+void drawBlood(int x, int y, float radius1, float radius2) {
+    glColor3f(1.0, 0.0, 0.0);  // Bright red color
+
+    int segments = 30;
+
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2i(x, y); // Center of the blood drop
+
+    // Draw the circle (blood drop)
+    for (int i = 0; i <= segments; i++) {
+        float angle = (2 * 3.14159265359 * i) / segments;
+        float dx = radius1 * cos(angle);
+        float dy = radius2 * sin(angle);
+        glVertex2i(x + dx, y + dy); // Adjusted for center
+    }
+    glEnd();
+}
+
+void drawFire(int x, int y) {
+    if (showFire) {
+        glColor3f(1.0, 0.27, 0.0);  // Fire red color
+
+        // Draw the first triangle
+        glBegin(GL_TRIANGLES);
+        glVertex2i(x, y);
+        glVertex2i(x + 20, y);
+        glVertex2i(x + 10, y + 20);
+        glEnd();
+
+        // Draw the second triangle
+        glBegin(GL_TRIANGLES);
+        glVertex2i(x + 10, y);
+        glVertex2i(x + 30, y);
+        glVertex2i(x + 20, y + 20);
+        glEnd();
+
+        // Draw the third triangle
+        glBegin(GL_TRIANGLES);
+        glVertex2i(x + 20, y);
+        glVertex2i(x + 40, y);
+        glVertex2i(x + 30, y + 20);
+        glEnd();
+
+        // Draw the fourth triangle
+        glBegin(GL_TRIANGLES);
+        glVertex2i(x + 30, y);
+        glVertex2i(x + 50, y);
+        glVertex2i(x + 40, y + 20);
+        glEnd();
+    }
+}
+
+void toggleFire(int value) {
+    // Toggle the fire visibility
+    showFire = !showFire;
+
+    // Call this function every "flashSpeed" milliseconds to toggle visibility
+    glutPostRedisplay();  // Redraw the screen
+    glutTimerFunc(flashSpeedFire, toggleFire, 0);  // Repeat the timer
+}
 
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT); // Clear the screen with the sky color
-
-
-    // Draw the road
-    drawRoad();
 
     // Draw the clouds
     drawCloud(cloud1Pos, 450);
@@ -702,14 +1080,64 @@ void display(void)
     drawCloud(cloud4Pos, 500);
     drawCloud(cloud5Pos, 500);
 
+    //house
+    drawHouseType1(-100, -50, 230, 230, 250);
+    drawHouseType1(-250, -10, 178, 34, 34);
+    drawHouseType1(-350, -20, 169, 169, 169);
+    drawHouseType1(-450, -50, 80, 49, 30);
+    drawHouseType1(-180, -70, 245, 245, 220);
+
+    drawHouseType1(300, 10, 80, 49, 30);
+    drawHouseType1(100, -20, 169, 169, 169);
+    drawHouseType1(0, 10, 30, 49, 80);
+
+    drawTreeType1(-70, -5);
+    drawTreeType1(70, -5);
+    drawTreeType1(100, -5);
+    drawHouseType1(400, 0, 30, 49, 80);
+    drawHouseType1(200, -100, 245, 245, 220);
+    drawHouseType1(500, -30, 128, 128, 0);
+
+
+    drawRoad();
+    // Draw the road
+    drawFence(0, -70);
+
+    drawTreeType1(440, -5);
+    drawTreeType1(360, -5);
+    drawTreeType1(300, -5);
+    drawTreeType1(330, -5);
+    drawTreeType1(-350, -5);
+    drawTreeType1(-400, -5);
+    drawTreeType1(-200, -5);
+    drawTreeType1(-250, -5);
+
+    drawLamppost(350,140);
+    drawLamppost(50,140);
+    drawLamppost(650,140);
+    drawLamppost(950,140);
+
     drawTent(-600, -330);
     drawTent(-720, -330);
 
-    drawRickshaw(500, -20);
+    drawBlood(530, 160, 20.0f, 15.0f);
+    //draw man (Rickshaw)
+    drawMan(500, 150, -75.0f);
+    drawBlood(520, 170, 5.0f, 5.0f);
+    //draw fire
+    drawFire(635, 130);
+    drawRickshaw(400, -20);
+    //draw fire
+    drawFire(660, 115);
+
     // Draw the tank
     drawTank(tankPos, -190);
 
 
+    //draw man (Rickshaw)
+    //drawMan(550, 150, 65.0f);
+
+    //draw army
     drawArmy(100, 100);
     drawArmy(85, 80);
     drawArmy(70, 65);
@@ -719,7 +1147,9 @@ void display(void)
     drawBarricade(200, -50);
     drawBarricade2(320, -50);
 
-    // Draw raindrops if it's raining
+    //drawHeli(0,0);
+
+    // Draw raindrops
     if (isRaining) {
         drawRaindrops();
     }
@@ -755,10 +1185,11 @@ void keyboard(unsigned char key, int x, int y) {
 
     if (key == 'n' || key == 'N') {
         // Change background color to black
-        skyColor[0] = 0.0f;
-        skyColor[1] = 0.0f;
-        skyColor[2] = 0.0f;
+        skyColor[0] = 0.1529f;  //39
+        skyColor[1] = 0.2471f;  // 63
+        skyColor[2] = 0.3765f; // 96
         glClearColor(skyColor[0], skyColor[1], skyColor[2], skyColor[3]);
+
     }
     else if (key == 'b' || key == 'B') {
         // Change background color back to light blue
@@ -797,6 +1228,7 @@ int main(int argc, char** argv)
     glutIdleFunc(idle);
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutTimerFunc(flashSpeedFire, toggleFire, 0);
     glutMainLoop();
     return 0;
 }

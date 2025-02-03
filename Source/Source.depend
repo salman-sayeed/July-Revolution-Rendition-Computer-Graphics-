@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1738572926 source:d:\aiub\semester 7\computer graphics\project\july-revolution-rendition-computer-graphics-\source\main.cpp
+1738584776 source:d:\aiub\semester 7\computer graphics\project\july-revolution-rendition-computer-graphics-\source\main.cpp
 	<cstdio>
 	<GL/gl.h>
 	<GL/glut.h>
