@@ -16,7 +16,7 @@ The project seeks to educate audiences about the student uprising in Bangladesh 
 |-------------------|-----------------------------------------------------------------------|--------------------------------------------|
 | Salman Sayeed     | [American International University-Bangladesh](https://www.aiub.edu/) | [GitHub](https://github.com/salman-sayeed) |
 | S.M.Nahid Hassan  | [American International University-Bangladesh](https://www.aiub.edu/) | [GitHub](https://github.com/Nahid-Hassan1) |
-| Kayjer Islam      | [American International University-Bangladesh](https://www.aiub.edu/) | [GitHub](None)   |
+| Kayjer Islam      | [American International University-Bangladesh](https://www.aiub.edu/) | [GitHub](https://github.com/kayjer-islam)   |
 
 ## Environment & Tools
 - CodeBlock
